@@ -15,6 +15,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', routes);
 app.use('/users', users); 
 
+app.use(express.static('public'));
+app.use(express.static('node_modules'));
+
+console.log("=====SERVER RUNNING======");
+
+
+
 var port = process.env.PORT || '4000';
 
 app.listen(port);
