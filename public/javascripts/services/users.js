@@ -1,31 +1,31 @@
-app.factory('posts', ['$http', 'users', function($http, users) {
+// app.factory('posts', ['$http', 'users', function($http, users) {
 
-  var userService = {
-    users: [],
+//   var userService = {
+//     users: [],
 
-    getAll: function() {
-      return $http.get('/posts').then(function(data) {
+//     getAll: function() {
+//       return $http.get('/posts').then(function(data) {
   
-        angular.copy(data.data, postService.posts);
-      });
-    },
+//         angular.copy(data.data, postService.posts);
+//       });
+//     },
 
 
 
-    addFriend: function(id, comment) {
-      return $http.post('/posts/' + id + '/comments', comment);
-    },
+//     addFriend: function(id, comment) {
+//       return $http.post('/posts/' + id + '/comments', comment);
+//     },
 
-    removeFriend: function(post, comment) {
-      return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/upvote', null).success(function(data){
-        comment.upvotes += 1;
-      });
-    }
-  };
+//     removeFriend: function(post, comment) {
+//       return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/upvote', null).success(function(data){
+//         comment.upvotes += 1;
+//       });
+//     }
+//   };
   
 
-  return userService;
-}]);
+//   return userService;
+// }]);
 
 
     // get: function(id) {
