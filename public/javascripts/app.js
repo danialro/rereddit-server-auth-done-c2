@@ -2,6 +2,7 @@ var app = angular.module('redditFun', ['ui.router']);
 
 app.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
   $stateProvider
+  
     .state('home', {
       url: '/home',
       templateUrl: '/templates/home.html',
@@ -12,6 +13,7 @@ app.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $url
         }]
       }
     })
+
     .state('post', {
       url: '/posts/:id',
       templateUrl: '/templates/posts.html',
@@ -22,6 +24,7 @@ app.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $url
         }]
       }
     })
+
     .state('login', {
       url: '/login',
       templateUrl: '/templates/login.html',
@@ -32,6 +35,7 @@ app.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $url
         }
       }]
     })
+
     .state('register', {
       url: '/register',
       templateUrl: '/templates/register.html',
@@ -45,5 +49,46 @@ app.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $url
       }]
     })
 
+    .state('users', {
+      url: '/users',
+      templateUrl: '/templates/users.html',
+      controller: 'UserCtrl',
+      resolve: {
+        usersPromise: ['users', function(users) {
+          return users.getUsers();
+        }],
+        user: ['auth', function(auth) {
+          return auth.currentUser();
+        }],
+        friends: ['users', function(users) {
+          return users.getFriends();
+        }]
+      }
+    })
+
+    .state('user', {
+      url: '/users/:id',
+      templateUrl: '/templates/user.html',
+      controller: 'UserCtrl',
+      resolve: {
+        user: ['$stateParams', 'users', function($stateParams, users) {
+          return users.get($stateParams.id);
+        }]
+      }
+    })
+
+
   $urlRouterProvider.otherwise('home');
+
+
 }]);
+
+
+
+
+
+
+
+
+
+

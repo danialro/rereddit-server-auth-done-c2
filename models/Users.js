@@ -5,9 +5,10 @@ var jwt = require('jsonwebtoken');
 var UserSchema = new mongoose.Schema({
   username: { type: String, lowercase: true, unique: true },
   hash: String,
-  salt: String
-  // friends: [{type: Schema.Types.ObjectId, ref: 'User'}]
+  salt: String,
+  friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
+
 
 UserSchema.methods.setPassword = function(password){
   this.salt = crypto.randomBytes(16).toString('hex');
@@ -15,11 +16,13 @@ UserSchema.methods.setPassword = function(password){
   this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
 };
 
+
 UserSchema.methods.validPassword = function(password) {
   var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
 
   return this.hash === hash;
 };
+
 
 UserSchema.methods.generateJWT = function() {
   var today = new Date();
@@ -33,6 +36,25 @@ UserSchema.methods.generateJWT = function() {
   }, 'myLittleSecret');
 };
 
+
+UserSchema.methods.addfriend = function(friend) {
+  this.friends.push(friend);
+};
+
+UserSchema.methods.removefriend = function(friend) {
+  this.friends.splice(friend, 1);
+};
+
+
 var User = mongoose.model('User', UserSchema);
 
 module.exports = User;
+
+
+
+
+
+
+
+
+

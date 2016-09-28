@@ -1,17 +1,23 @@
 <h1>All Users</h1>
-<div ng-repeat="user in users" ng-hide="isCurrentUser(user)">
-  <span class="user-name">
-    <span ng-hide="isFriend(user)">
-      <button class="btn btn-primary" ng-click="addFriend(user)">Add Friend</button>
-    </span>
 
-    <span ng-show="isFriend(user)">
-      <button class="btn btn-danger" ng-click="removeFriend(user)">Remove Friend</button>
+<div ng-repeat="user in users">
+
+  <div ng-hide="isCurrentUser(user)">
+    <span class="user-name">
+
+      <span ng-hide="isFriend(user)">
+        <button class="btn btn-primary" ng-click="addFriend(user)">Add Friend</button>
+      </span>
+
+      <span ng-show="isFriend(user)">
+        <button class="btn btn-danger" ng-click="removeFriend(user)">Remove Friend</button>
+      </span>
+      <span>
+        <a href="#/users/{{user._id}}">{{user.username}}</a>
+      </span>
     </span>
-    <span>
-      <a href="#/users/{{user._id}}">{{user.username}}</a>
-    </span>
-  </span>
-  <br>
-  <br>
+    <br>
+    <br>
+  </div>
+
 </div>

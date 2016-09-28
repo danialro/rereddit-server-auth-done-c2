@@ -1,4 +1,5 @@
 app.factory('auth', ['$http', '$window', function($http, $window){
+  
    var auth = {};
 
    auth.saveToken = function (token) {

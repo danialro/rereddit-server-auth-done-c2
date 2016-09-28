@@ -1,4 +1,5 @@
 app.factory('posts', ['$http', 'auth', function($http, auth) {
+  
   var postService = {
     posts: [],
 

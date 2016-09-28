@@ -1,49 +1,75 @@
-// app.factory('posts', ['$http', 'users', function($http, users) {
+app.factory('users', ['$http', 'auth', '$window', function($http, auth, $window) {
 
-//   var userService = {
-//     users: [],
+  var userService = {
+    users: [],
+    currentUserFriends: [],
 
-//     getAll: function() {
-//       return $http.get('/posts').then(function(data) {
+    getUsers: function() {
+    console.log('in the user service');
+      return $http.get('/users').then(function(data) {
   
-//         angular.copy(data.data, postService.posts);
-//       });
-//     },
+        angular.copy(data.data, userService.users);
+      });
+    },
+
+    get: function(id) {
+      return $http.get('/users/' + id).then(function(res){
+        return res.data;
+      });
+    },
+
+    isCurrentUser: function(user) {
+       var token = auth.getToken();
+       var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+       if (payload.username === user.username){
+        return true;
+       }
+    },
+
+    getFriends: function() {
+          
+        var token = auth.getToken();
+        var payload = JSON.parse($window.atob(token.split('.')[1]))
+        var id = payload._id
+
+        return $http.get('/users/' + id + '/friends').then(function(res){
+          console.log(res.data)
+          userService.currentUserFriends = res.data;
+          
+        });
+    },
 
 
+    addFriend: function(user) {
+      var token = auth.getToken();
+      var payload = JSON.parse($window.atob(token.split('.')[1]))
+      var id = payload._id
+      var friend = user._id
 
-//     addFriend: function(id, comment) {
-//       return $http.post('/posts/' + id + '/comments', comment);
-//     },
+      return $http.put('/users/' + id + '/friends/addfriend/' + friend).then(function(res){
+        console.log('in service add friend');
+        userService.getFriends();
+      })
+    },
 
-//     removeFriend: function(post, comment) {
-//       return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/upvote', null).success(function(data){
-//         comment.upvotes += 1;
-//       });
-//     }
-//   };
+
+    removeFriend: function(user, user2) {
+      var token = auth.getToken();
+      var payload = JSON.parse($window.atob(token.split('.')[1]))
+      var id = payload._id
+      var friend = user._id
+
+      return $http.put('/users/' + id + '/friends/removefriend/' + friend).then(function(res){
+        console.log('in service add friend');
+        userService.getFriends();
+      })
+    }
+
+  };
   
 
-//   return userService;
-// }]);
+  return userService;
 
 
-    // get: function(id) {
-    //   return $http.get('/posts/' + id).then(function(res){
-    //     return res.data;
-    //   });
-    // },
-
-    // create: function(post) {
-    //   return $http.post('/posts', post, {
-    //     headers: {Authorization: 'Bearer '+ auth.getToken()}
-    //   }).success(function(data){
-    //     postService.posts.push(data);
-    //   });
-    // },
-
-    // upvote: function(post) {
-    //   return $http.put('/posts/' + post._id + '/upvote', null).success(function(data){
-    //     post.upvotes += 1;
-    //   });
-    // },
+}]);
